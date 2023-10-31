@@ -28,11 +28,15 @@ class RequesTranslate(BaseModel):
 def index():
     return {'response':'Hola Mundo'}
 
-@app.get('/translate/{from_payload}/{to_payload}/{text_buffer}')
-async def translate_text_buffer(from_payload: str, to_payload: str, text_buffer:str):
-    try:
-        traduction = Trans()    
+@app.get('/translate/{to_payload}/{text_buffer}')
+async def translate_text_buffer(to_payload: str, text_buffer:str):
+    from_payload = 'es'
 
+    if to_payload == 'es':
+        from_payload = 'en'
+
+    try:
+        traduction = Trans(text_buffer, to_payload)
         return {'from':from_payload, 'to':to_payload, 'last_text':text_buffer, 'translate_result':traduction}
     except Exception:
         return { 'error temporal' }
